@@ -1,0 +1,52 @@
+name: artrev
+description: "A literature review and study app for urogynecology."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.5
+  
+  # State management
+  flutter_riverpod: ^2.3.6
+  riverpod_annotation: ^2.1.1
+  
+  # Database
+  drift: ^2.11.0
+  sqlite3_flutter_libs: ^0.5.15
+  path_provider: ^2.0.15
+  path: ^1.8.3
+  
+  # UI
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.7
+  
+  # Networking
+  http: ^1.1.0
+  dio: ^5.3.0
+  
+  # File handling
+  file_picker: ^9.0.1
+  desktop_drop: ^0.5.0
+  
+  # Utilities
+  intl: ^0.20.2
+  uuid: ^4.5.1
+  logger: ^2.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.6
+  drift_dev: ^2.11.0
+  riverpod_generator: ^2.2.3
+  custom_lint: ^0.7.3
+  riverpod_lint: ^2.6.4
+
+flutter:
+  uses-material-design: true
