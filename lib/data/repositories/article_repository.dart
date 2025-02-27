@@ -1,3 +1,4 @@
+// lib/data/repositories/article_repository.dart
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:artrev/core/services/pubmed_service.dart';
 import 'package:artrev/data/datasources/local/database.dart';
@@ -11,6 +12,7 @@ class ArticleRepository {
 
   ArticleRepository(this._pubmedService, this._database);
 
+  // Search methods remain the same
   Future<List<Article>> searchArticles(String query, {int page = 0, int pageSize = 20}) async {
     try {
       final searchResult = await _pubmedService.searchArticles(
@@ -35,33 +37,17 @@ class ArticleRepository {
     }
   }
 
+  // Update to use the conversion methods
   Future<void> saveArticle(Article article) async {
-    await _database.into(_database.articles).insert(
-      ArticlesCompanion.insert(
-        pubmedId: article.pubmedId,
-        title: article.title,
-        authors: article.authors,
-        abstract: article.abstract.isEmpty ? Value.absent() : Value(article.abstract),
-        journal: article.journal,
-        publicationDate: article.publicationDate,
-        doi: article.doi.isEmpty ? Value.absent() : Value(article.doi),
-        pdfPath: article.pdfPath == null ? Value.absent() : Value(article.pdfPath!),
-      ),
+    await _database.into(_database.articlesTable).insert(
+      _database.articleToDbCompanion(article),
     );
   }
 
+  // Update to use the conversion methods
   Future<List<Article>> getSavedArticles() async {
-    final results = await _database.select(_database.articles).get();
-    return results.map((row) => Article(
-      pubmedId: row.pubmedId,
-      title: row.title,
-      authors: row.authors,
-      abstract: row.abstract ?? '',
-      journal: row.journal,
-      publicationDate: row.publicationDate,
-      doi: row.doi ?? '',
-      pdfPath: row.pdfPath,
-    )).toList();
+    final results = await _database.select(_database.articlesTable).get();
+    return results.map(_database.articleFromDb).toList();
   }
 }
 
