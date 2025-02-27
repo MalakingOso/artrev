@@ -8,17 +8,19 @@ class ArticleCard extends StatelessWidget {
   final VoidCallback onSave;
 
   const ArticleCard({
-    Key? key,
+    super.key,
     required this.article,
     required this.onSave,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
+      elevation: 3,
+      shadowColor: Colors.black26,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: AppColors.border.withAlpha(25), width: 1),
       ),
       child: InkWell(
         onTap: () {
@@ -44,6 +46,7 @@ class ArticleCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        color: AppColors.text,
                       ),
                     ),
                   ),
@@ -62,18 +65,40 @@ class ArticleCard extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 article.authors,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
-                  color: Colors.grey.shade700,
+                  color: AppColors.textLight,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                '${article.journal} · ${article.publicationDate}',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+              Row(
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary.withAlpha(200),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      article.journal,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.secondary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    article.publicationDate,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textLight,
+                    ),
+                  ),
+                ],
               ),
               if (article.abstract.isNotEmpty) ...[
                 const SizedBox(height: 12),
@@ -81,7 +106,10 @@ class ArticleCard extends StatelessWidget {
                   article.abstract.length > 200
                       ? '${article.abstract.substring(0, 200)}...'
                       : article.abstract,
-                  style: const TextStyle(fontSize: 14),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.text,
+                  ),
                 ),
               ],
               const SizedBox(height: 12),
@@ -95,7 +123,8 @@ class ArticleCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ArticleDetailScreen(article: article),
+                          builder: (context) =>
+                              ArticleDetailScreen(article: article),
                         ),
                       );
                     },

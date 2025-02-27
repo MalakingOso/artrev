@@ -6,11 +6,28 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: const ColorScheme.light(
+      colorScheme: ColorScheme(
+        brightness: Brightness.light,
         primary: AppColors.primary,
+        onPrimary: AppColors.textOnPrimary,
+        primaryContainer: AppColors.primaryLight,
+        onPrimaryContainer: AppColors.textOnPrimary,
         secondary: AppColors.secondary,
-        background: AppColors.background,
+        onSecondary: AppColors.textOnSecondary,
+        secondaryContainer: AppColors.secondaryLight,
+        onSecondaryContainer: AppColors.textOnSecondary,
+        tertiary: AppColors.accent,
+        onTertiary: AppColors.text,
+        tertiaryContainer: AppColors.accentLight,
+        onTertiaryContainer: AppColors.text,
+        error: AppColors.error,
+        onError: Colors.white,
         surface: AppColors.surface,
+        onSurface: AppColors.text,
+        surfaceContainerHighest: AppColors.card,
+        onSurfaceVariant: AppColors.textLight,
+        outline: AppColors.border,
+        shadow: Colors.black.withAlpha(25),
       ),
       scaffoldBackgroundColor: AppColors.background,
       textTheme: GoogleFonts.robotoTextTheme().copyWith(
@@ -34,8 +51,8 @@ class AppTheme {
         ),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.text,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.textOnPrimary,
         elevation: 0,
       ),
       cardTheme: CardTheme(
@@ -48,7 +65,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.textOnPrimary,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
@@ -64,6 +81,11 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: AppColors.primary,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -82,6 +104,19 @@ class AppTheme {
           borderSide: const BorderSide(color: AppColors.primary, width: 1),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      ),
+      dividerTheme: const DividerThemeData(
+        color: AppColors.divider,
+        thickness: 1,
+      ),
+      iconTheme: const IconThemeData(
+        color: AppColors.text,
+        size: 24,
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: AppColors.surface,
+        labelStyle: TextStyle(color: AppColors.text),
+        side: BorderSide(color: AppColors.border),
       ),
     );
   }

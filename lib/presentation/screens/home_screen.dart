@@ -4,9 +4,10 @@ import 'package:artrev/core/constants/app_colors.dart';
 import 'package:artrev/presentation/screens/search_screen.dart';
 import 'package:artrev/presentation/screens/saved_articles_screen.dart';
 import 'package:artrev/presentation/screens/flashcards_screen.dart';
+import 'package:artrev/presentation/widgets/custom_title_bar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
@@ -26,25 +27,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: const Text(
-          'ArtRev',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
+      // Remove the default AppBar
+      // Instead, wrap the body in a Column with our custom title bar
+      body: Column(
+        children: [
+          // Custom title bar
+          CustomTitleBar(
+            title: 'ArtRev',
+            onMenuPressed: () {
+              _scaffoldKey.currentState?.openDrawer();
+            },
+          ),
+          
+          // Main content
+          Expanded(
+            child: _screens[_selectedIndex],
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: AppColors.primaryGradient,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +72,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Text(
                     'Your urogynecology literature companion',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withAlpha(25),
                       fontSize: 14,
                     ),
                   ),
@@ -69,27 +80,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.search),
+              leading: const Icon(Icons.search, color: AppColors.primary),
               title: const Text('Search Literature'),
               selected: _selectedIndex == 0,
+              selectedTileColor: AppColors.primaryLight.withAlpha(25),
+              selectedColor: AppColors.primary,
               onTap: () {
                 _onItemTapped(0);
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.bookmark),
+              leading: const Icon(Icons.bookmark, color: AppColors.primary),
               title: const Text('Saved Articles'),
               selected: _selectedIndex == 1,
+              selectedTileColor: AppColors.primaryLight.withAlpha(25),
+              selectedColor: AppColors.primary,
               onTap: () {
                 _onItemTapped(1);
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.flash_on),
+              leading: const Icon(Icons.flash_on, color: AppColors.primary),
               title: const Text('Flashcards'),
               selected: _selectedIndex == 2,
+              selectedTileColor: AppColors.primaryLight.withAlpha(25),
+              selectedColor: AppColors.primary,
               onTap: () {
                 _onItemTapped(2);
                 Navigator.pop(context);
@@ -97,7 +114,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const Divider(),
             ListTile(
-              leading: const Icon(Icons.settings),
+              leading: const Icon(Icons.settings, color: AppColors.secondary),
               title: const Text('Settings'),
               onTap: () {
                 // Navigate to settings
@@ -105,7 +122,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.info),
+              leading: const Icon(Icons.info, color: AppColors.secondary),
               title: const Text('About'),
               onTap: () {
                 // Show about dialog
@@ -115,7 +132,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
         ),
       ),
-      body: _screens[_selectedIndex],
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onItemTapped,
+        backgroundColor: AppColors.surface,
+        elevation: 3,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bookmark),
+            label: 'Saved',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.flash_on),
+            label: 'Flashcards',
+          ),
+        ],
+      ),
     );
   }
 
