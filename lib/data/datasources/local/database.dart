@@ -1,12 +1,18 @@
+// lib/data/datasources/local/database.dart
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:artrev/data/models/article.dart';
 
 part 'database.g.dart';
 
-class Articles extends Table {
+class ArticlesTable extends Table {
+  // Rename the table to ArticlesTable but keep the table name 'articles'
+  @override
+  String get tableName => 'articles';
+  
   IntColumn get id => integer().autoIncrement()();
   TextColumn get pubmedId => text()();
   TextColumn get title => text()();
@@ -19,9 +25,13 @@ class Articles extends Table {
   DateTimeColumn get savedAt => dateTime().withDefault(currentDateAndTime)();
 }
 
-class Flashcards extends Table {
+class FlashcardsTable extends Table {
+  // Rename the table to FlashcardsTable but keep the table name 'flashcards'
+  @override
+  String get tableName => 'flashcards';
+  
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get articleId => integer().references(Articles, #id)();
+  IntColumn get articleId => integer().references(ArticlesTable, #id)();
   TextColumn get question => text()();
   TextColumn get answer => text()();
   IntColumn get box => integer().withDefault(const Constant(0))();
@@ -30,18 +40,46 @@ class Flashcards extends Table {
   DateTimeColumn get lastReviewedAt => dateTime().nullable()();
 }
 
-@DriftDatabase(tables: [Articles, Flashcards])
+@DriftDatabase(tables: [ArticlesTable, FlashcardsTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
   int get schemaVersion => 1;
+  
+  // Convert database entity to domain model
+  Article articleFromDb(ArticlesTableData data) {
+    return Article(
+      pubmedId: data.pubmedId,
+      title: data.title,
+      authors: data.authors,
+      abstract: data.abstract ?? '',
+      journal: data.journal,
+      publicationDate: data.publicationDate,
+      doi: data.doi ?? '',
+      pdfPath: data.pdfPath,
+    );
+  }
+  
+  // Convert domain model to database companion
+  ArticlesTableCompanion articleToDbCompanion(Article article) {
+    return ArticlesTableCompanion.insert(
+      pubmedId: article.pubmedId,
+      title: article.title,
+      authors: article.authors,
+      abstract: article.abstract.isEmpty ? const Value.absent() : Value(article.abstract),
+      journal: article.journal,
+      publicationDate: article.publicationDate,
+      doi: article.doi.isEmpty ? const Value.absent() : Value(article.doi),
+      pdfPath: article.pdfPath == null ? const Value.absent() : Value(article.pdfPath!),
+    );
+  }
 }
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'artrev.sqlite'));
+    final file = File(p.join(dbFolder.path, 'urogyneconnect.sqlite'));
     return NativeDatabase(file);
   });
 }

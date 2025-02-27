@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:artrev/core/constants/app_colors.dart';
-import 'package:artrev/data/models/article.dart';
 import 'package:artrev/presentation/viewmodels/article_viewmodel.dart';
 import 'package:artrev/presentation/widgets/article_card.dart';
 

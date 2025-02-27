@@ -3,11 +3,12 @@
 part of 'database.dart';
 
 // ignore_for_file: type=lint
-class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
+class $ArticlesTableTable extends ArticlesTable
+    with TableInfo<$ArticlesTableTable, ArticlesTableData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ArticlesTable(this.attachedDatabase, [this._alias]);
+  $ArticlesTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -90,7 +91,7 @@ class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
   String get actualTableName => $name;
   static const String $name = 'articles';
   @override
-  VerificationContext validateIntegrity(Insertable<Article> instance,
+  VerificationContext validateIntegrity(Insertable<ArticlesTableData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -151,9 +152,9 @@ class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Article map(Map<String, dynamic> data, {String? tablePrefix}) {
+  ArticlesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Article(
+    return ArticlesTableData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       pubmedId: attachedDatabase.typeMapping
@@ -178,12 +179,13 @@ class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
   }
 
   @override
-  $ArticlesTable createAlias(String alias) {
-    return $ArticlesTable(attachedDatabase, alias);
+  $ArticlesTableTable createAlias(String alias) {
+    return $ArticlesTableTable(attachedDatabase, alias);
   }
 }
 
-class Article extends DataClass implements Insertable<Article> {
+class ArticlesTableData extends DataClass
+    implements Insertable<ArticlesTableData> {
   final int id;
   final String pubmedId;
   final String title;
@@ -194,7 +196,7 @@ class Article extends DataClass implements Insertable<Article> {
   final String? doi;
   final String? pdfPath;
   final DateTime savedAt;
-  const Article(
+  const ArticlesTableData(
       {required this.id,
       required this.pubmedId,
       required this.title,
@@ -227,8 +229,8 @@ class Article extends DataClass implements Insertable<Article> {
     return map;
   }
 
-  ArticlesCompanion toCompanion(bool nullToAbsent) {
-    return ArticlesCompanion(
+  ArticlesTableCompanion toCompanion(bool nullToAbsent) {
+    return ArticlesTableCompanion(
       id: Value(id),
       pubmedId: Value(pubmedId),
       title: Value(title),
@@ -246,10 +248,10 @@ class Article extends DataClass implements Insertable<Article> {
     );
   }
 
-  factory Article.fromJson(Map<String, dynamic> json,
+  factory ArticlesTableData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Article(
+    return ArticlesTableData(
       id: serializer.fromJson<int>(json['id']),
       pubmedId: serializer.fromJson<String>(json['pubmedId']),
       title: serializer.fromJson<String>(json['title']),
@@ -279,7 +281,7 @@ class Article extends DataClass implements Insertable<Article> {
     };
   }
 
-  Article copyWith(
+  ArticlesTableData copyWith(
           {int? id,
           String? pubmedId,
           String? title,
@@ -290,7 +292,7 @@ class Article extends DataClass implements Insertable<Article> {
           Value<String?> doi = const Value.absent(),
           Value<String?> pdfPath = const Value.absent(),
           DateTime? savedAt}) =>
-      Article(
+      ArticlesTableData(
         id: id ?? this.id,
         pubmedId: pubmedId ?? this.pubmedId,
         title: title ?? this.title,
@@ -302,8 +304,8 @@ class Article extends DataClass implements Insertable<Article> {
         pdfPath: pdfPath.present ? pdfPath.value : this.pdfPath,
         savedAt: savedAt ?? this.savedAt,
       );
-  Article copyWithCompanion(ArticlesCompanion data) {
-    return Article(
+  ArticlesTableData copyWithCompanion(ArticlesTableCompanion data) {
+    return ArticlesTableData(
       id: data.id.present ? data.id.value : this.id,
       pubmedId: data.pubmedId.present ? data.pubmedId.value : this.pubmedId,
       title: data.title.present ? data.title.value : this.title,
@@ -321,7 +323,7 @@ class Article extends DataClass implements Insertable<Article> {
 
   @override
   String toString() {
-    return (StringBuffer('Article(')
+    return (StringBuffer('ArticlesTableData(')
           ..write('id: $id, ')
           ..write('pubmedId: $pubmedId, ')
           ..write('title: $title, ')
@@ -342,7 +344,7 @@ class Article extends DataClass implements Insertable<Article> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Article &&
+      (other is ArticlesTableData &&
           other.id == this.id &&
           other.pubmedId == this.pubmedId &&
           other.title == this.title &&
@@ -355,7 +357,7 @@ class Article extends DataClass implements Insertable<Article> {
           other.savedAt == this.savedAt);
 }
 
-class ArticlesCompanion extends UpdateCompanion<Article> {
+class ArticlesTableCompanion extends UpdateCompanion<ArticlesTableData> {
   final Value<int> id;
   final Value<String> pubmedId;
   final Value<String> title;
@@ -366,7 +368,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
   final Value<String?> doi;
   final Value<String?> pdfPath;
   final Value<DateTime> savedAt;
-  const ArticlesCompanion({
+  const ArticlesTableCompanion({
     this.id = const Value.absent(),
     this.pubmedId = const Value.absent(),
     this.title = const Value.absent(),
@@ -378,7 +380,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
     this.pdfPath = const Value.absent(),
     this.savedAt = const Value.absent(),
   });
-  ArticlesCompanion.insert({
+  ArticlesTableCompanion.insert({
     this.id = const Value.absent(),
     required String pubmedId,
     required String title,
@@ -394,7 +396,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
         authors = Value(authors),
         journal = Value(journal),
         publicationDate = Value(publicationDate);
-  static Insertable<Article> custom({
+  static Insertable<ArticlesTableData> custom({
     Expression<int>? id,
     Expression<String>? pubmedId,
     Expression<String>? title,
@@ -420,7 +422,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
     });
   }
 
-  ArticlesCompanion copyWith(
+  ArticlesTableCompanion copyWith(
       {Value<int>? id,
       Value<String>? pubmedId,
       Value<String>? title,
@@ -431,7 +433,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
       Value<String?>? doi,
       Value<String?>? pdfPath,
       Value<DateTime>? savedAt}) {
-    return ArticlesCompanion(
+    return ArticlesTableCompanion(
       id: id ?? this.id,
       pubmedId: pubmedId ?? this.pubmedId,
       title: title ?? this.title,
@@ -483,7 +485,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
 
   @override
   String toString() {
-    return (StringBuffer('ArticlesCompanion(')
+    return (StringBuffer('ArticlesTableCompanion(')
           ..write('id: $id, ')
           ..write('pubmedId: $pubmedId, ')
           ..write('title: $title, ')
@@ -499,12 +501,12 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
   }
 }
 
-class $FlashcardsTable extends Flashcards
-    with TableInfo<$FlashcardsTable, Flashcard> {
+class $FlashcardsTableTable extends FlashcardsTable
+    with TableInfo<$FlashcardsTableTable, FlashcardsTableData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FlashcardsTable(this.attachedDatabase, [this._alias]);
+  $FlashcardsTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -578,7 +580,8 @@ class $FlashcardsTable extends Flashcards
   String get actualTableName => $name;
   static const String $name = 'flashcards';
   @override
-  VerificationContext validateIntegrity(Insertable<Flashcard> instance,
+  VerificationContext validateIntegrity(
+      Insertable<FlashcardsTableData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -631,9 +634,9 @@ class $FlashcardsTable extends Flashcards
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Flashcard map(Map<String, dynamic> data, {String? tablePrefix}) {
+  FlashcardsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Flashcard(
+    return FlashcardsTableData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       articleId: attachedDatabase.typeMapping
@@ -654,12 +657,13 @@ class $FlashcardsTable extends Flashcards
   }
 
   @override
-  $FlashcardsTable createAlias(String alias) {
-    return $FlashcardsTable(attachedDatabase, alias);
+  $FlashcardsTableTable createAlias(String alias) {
+    return $FlashcardsTableTable(attachedDatabase, alias);
   }
 }
 
-class Flashcard extends DataClass implements Insertable<Flashcard> {
+class FlashcardsTableData extends DataClass
+    implements Insertable<FlashcardsTableData> {
   final int id;
   final int articleId;
   final String question;
@@ -668,7 +672,7 @@ class Flashcard extends DataClass implements Insertable<Flashcard> {
   final DateTime nextReview;
   final DateTime createdAt;
   final DateTime? lastReviewedAt;
-  const Flashcard(
+  const FlashcardsTableData(
       {required this.id,
       required this.articleId,
       required this.question,
@@ -693,8 +697,8 @@ class Flashcard extends DataClass implements Insertable<Flashcard> {
     return map;
   }
 
-  FlashcardsCompanion toCompanion(bool nullToAbsent) {
-    return FlashcardsCompanion(
+  FlashcardsTableCompanion toCompanion(bool nullToAbsent) {
+    return FlashcardsTableCompanion(
       id: Value(id),
       articleId: Value(articleId),
       question: Value(question),
@@ -708,10 +712,10 @@ class Flashcard extends DataClass implements Insertable<Flashcard> {
     );
   }
 
-  factory Flashcard.fromJson(Map<String, dynamic> json,
+  factory FlashcardsTableData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Flashcard(
+    return FlashcardsTableData(
       id: serializer.fromJson<int>(json['id']),
       articleId: serializer.fromJson<int>(json['articleId']),
       question: serializer.fromJson<String>(json['question']),
@@ -737,7 +741,7 @@ class Flashcard extends DataClass implements Insertable<Flashcard> {
     };
   }
 
-  Flashcard copyWith(
+  FlashcardsTableData copyWith(
           {int? id,
           int? articleId,
           String? question,
@@ -746,7 +750,7 @@ class Flashcard extends DataClass implements Insertable<Flashcard> {
           DateTime? nextReview,
           DateTime? createdAt,
           Value<DateTime?> lastReviewedAt = const Value.absent()}) =>
-      Flashcard(
+      FlashcardsTableData(
         id: id ?? this.id,
         articleId: articleId ?? this.articleId,
         question: question ?? this.question,
@@ -757,8 +761,8 @@ class Flashcard extends DataClass implements Insertable<Flashcard> {
         lastReviewedAt:
             lastReviewedAt.present ? lastReviewedAt.value : this.lastReviewedAt,
       );
-  Flashcard copyWithCompanion(FlashcardsCompanion data) {
-    return Flashcard(
+  FlashcardsTableData copyWithCompanion(FlashcardsTableCompanion data) {
+    return FlashcardsTableData(
       id: data.id.present ? data.id.value : this.id,
       articleId: data.articleId.present ? data.articleId.value : this.articleId,
       question: data.question.present ? data.question.value : this.question,
@@ -775,7 +779,7 @@ class Flashcard extends DataClass implements Insertable<Flashcard> {
 
   @override
   String toString() {
-    return (StringBuffer('Flashcard(')
+    return (StringBuffer('FlashcardsTableData(')
           ..write('id: $id, ')
           ..write('articleId: $articleId, ')
           ..write('question: $question, ')
@@ -794,7 +798,7 @@ class Flashcard extends DataClass implements Insertable<Flashcard> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Flashcard &&
+      (other is FlashcardsTableData &&
           other.id == this.id &&
           other.articleId == this.articleId &&
           other.question == this.question &&
@@ -805,7 +809,7 @@ class Flashcard extends DataClass implements Insertable<Flashcard> {
           other.lastReviewedAt == this.lastReviewedAt);
 }
 
-class FlashcardsCompanion extends UpdateCompanion<Flashcard> {
+class FlashcardsTableCompanion extends UpdateCompanion<FlashcardsTableData> {
   final Value<int> id;
   final Value<int> articleId;
   final Value<String> question;
@@ -814,7 +818,7 @@ class FlashcardsCompanion extends UpdateCompanion<Flashcard> {
   final Value<DateTime> nextReview;
   final Value<DateTime> createdAt;
   final Value<DateTime?> lastReviewedAt;
-  const FlashcardsCompanion({
+  const FlashcardsTableCompanion({
     this.id = const Value.absent(),
     this.articleId = const Value.absent(),
     this.question = const Value.absent(),
@@ -824,7 +828,7 @@ class FlashcardsCompanion extends UpdateCompanion<Flashcard> {
     this.createdAt = const Value.absent(),
     this.lastReviewedAt = const Value.absent(),
   });
-  FlashcardsCompanion.insert({
+  FlashcardsTableCompanion.insert({
     this.id = const Value.absent(),
     required int articleId,
     required String question,
@@ -837,7 +841,7 @@ class FlashcardsCompanion extends UpdateCompanion<Flashcard> {
         question = Value(question),
         answer = Value(answer),
         nextReview = Value(nextReview);
-  static Insertable<Flashcard> custom({
+  static Insertable<FlashcardsTableData> custom({
     Expression<int>? id,
     Expression<int>? articleId,
     Expression<String>? question,
@@ -859,7 +863,7 @@ class FlashcardsCompanion extends UpdateCompanion<Flashcard> {
     });
   }
 
-  FlashcardsCompanion copyWith(
+  FlashcardsTableCompanion copyWith(
       {Value<int>? id,
       Value<int>? articleId,
       Value<String>? question,
@@ -868,7 +872,7 @@ class FlashcardsCompanion extends UpdateCompanion<Flashcard> {
       Value<DateTime>? nextReview,
       Value<DateTime>? createdAt,
       Value<DateTime?>? lastReviewedAt}) {
-    return FlashcardsCompanion(
+    return FlashcardsTableCompanion(
       id: id ?? this.id,
       articleId: articleId ?? this.articleId,
       question: question ?? this.question,
@@ -912,7 +916,7 @@ class FlashcardsCompanion extends UpdateCompanion<Flashcard> {
 
   @override
   String toString() {
-    return (StringBuffer('FlashcardsCompanion(')
+    return (StringBuffer('FlashcardsTableCompanion(')
           ..write('id: $id, ')
           ..write('articleId: $articleId, ')
           ..write('question: $question, ')
@@ -929,16 +933,19 @@ class FlashcardsCompanion extends UpdateCompanion<Flashcard> {
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
-  late final $ArticlesTable articles = $ArticlesTable(this);
-  late final $FlashcardsTable flashcards = $FlashcardsTable(this);
+  late final $ArticlesTableTable articlesTable = $ArticlesTableTable(this);
+  late final $FlashcardsTableTable flashcardsTable =
+      $FlashcardsTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [articles, flashcards];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [articlesTable, flashcardsTable];
 }
 
-typedef $$ArticlesTableCreateCompanionBuilder = ArticlesCompanion Function({
+typedef $$ArticlesTableTableCreateCompanionBuilder = ArticlesTableCompanion
+    Function({
   Value<int> id,
   required String pubmedId,
   required String title,
@@ -950,7 +957,8 @@ typedef $$ArticlesTableCreateCompanionBuilder = ArticlesCompanion Function({
   Value<String?> pdfPath,
   Value<DateTime> savedAt,
 });
-typedef $$ArticlesTableUpdateCompanionBuilder = ArticlesCompanion Function({
+typedef $$ArticlesTableTableUpdateCompanionBuilder = ArticlesTableCompanion
+    Function({
   Value<int> id,
   Value<String> pubmedId,
   Value<String> title,
@@ -963,29 +971,32 @@ typedef $$ArticlesTableUpdateCompanionBuilder = ArticlesCompanion Function({
   Value<DateTime> savedAt,
 });
 
-final class $$ArticlesTableReferences
-    extends BaseReferences<_$AppDatabase, $ArticlesTable, Article> {
-  $$ArticlesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+final class $$ArticlesTableTableReferences extends BaseReferences<_$AppDatabase,
+    $ArticlesTableTable, ArticlesTableData> {
+  $$ArticlesTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$FlashcardsTable, List<Flashcard>>
-      _flashcardsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-          db.flashcards,
-          aliasName:
-              $_aliasNameGenerator(db.articles.id, db.flashcards.articleId));
+  static MultiTypedResultKey<$FlashcardsTableTable, List<FlashcardsTableData>>
+      _flashcardsTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.flashcardsTable,
+              aliasName: $_aliasNameGenerator(
+                  db.articlesTable.id, db.flashcardsTable.articleId));
 
-  $$FlashcardsTableProcessedTableManager get flashcardsRefs {
-    final manager = $$FlashcardsTableTableManager($_db, $_db.flashcards)
-        .filter((f) => f.articleId.id.sqlEquals($_itemColumn<int>('id')!));
+  $$FlashcardsTableTableProcessedTableManager get flashcardsTableRefs {
+    final manager =
+        $$FlashcardsTableTableTableManager($_db, $_db.flashcardsTable)
+            .filter((f) => f.articleId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final cache = $_typedResult.readTableOrNull(_flashcardsRefsTable($_db));
+    final cache =
+        $_typedResult.readTableOrNull(_flashcardsTableRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
 }
 
-class $$ArticlesTableFilterComposer
-    extends Composer<_$AppDatabase, $ArticlesTable> {
-  $$ArticlesTableFilterComposer({
+class $$ArticlesTableTableFilterComposer
+    extends Composer<_$AppDatabase, $ArticlesTableTable> {
+  $$ArticlesTableTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1023,19 +1034,19 @@ class $$ArticlesTableFilterComposer
   ColumnFilters<DateTime> get savedAt => $composableBuilder(
       column: $table.savedAt, builder: (column) => ColumnFilters(column));
 
-  Expression<bool> flashcardsRefs(
-      Expression<bool> Function($$FlashcardsTableFilterComposer f) f) {
-    final $$FlashcardsTableFilterComposer composer = $composerBuilder(
+  Expression<bool> flashcardsTableRefs(
+      Expression<bool> Function($$FlashcardsTableTableFilterComposer f) f) {
+    final $$FlashcardsTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.id,
-        referencedTable: $db.flashcards,
+        referencedTable: $db.flashcardsTable,
         getReferencedColumn: (t) => t.articleId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$FlashcardsTableFilterComposer(
+            $$FlashcardsTableTableFilterComposer(
               $db: $db,
-              $table: $db.flashcards,
+              $table: $db.flashcardsTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -1045,9 +1056,9 @@ class $$ArticlesTableFilterComposer
   }
 }
 
-class $$ArticlesTableOrderingComposer
-    extends Composer<_$AppDatabase, $ArticlesTable> {
-  $$ArticlesTableOrderingComposer({
+class $$ArticlesTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $ArticlesTableTable> {
+  $$ArticlesTableTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1086,9 +1097,9 @@ class $$ArticlesTableOrderingComposer
       column: $table.savedAt, builder: (column) => ColumnOrderings(column));
 }
 
-class $$ArticlesTableAnnotationComposer
-    extends Composer<_$AppDatabase, $ArticlesTable> {
-  $$ArticlesTableAnnotationComposer({
+class $$ArticlesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ArticlesTableTable> {
+  $$ArticlesTableTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1125,19 +1136,19 @@ class $$ArticlesTableAnnotationComposer
   GeneratedColumn<DateTime> get savedAt =>
       $composableBuilder(column: $table.savedAt, builder: (column) => column);
 
-  Expression<T> flashcardsRefs<T extends Object>(
-      Expression<T> Function($$FlashcardsTableAnnotationComposer a) f) {
-    final $$FlashcardsTableAnnotationComposer composer = $composerBuilder(
+  Expression<T> flashcardsTableRefs<T extends Object>(
+      Expression<T> Function($$FlashcardsTableTableAnnotationComposer a) f) {
+    final $$FlashcardsTableTableAnnotationComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.id,
-        referencedTable: $db.flashcards,
+        referencedTable: $db.flashcardsTable,
         getReferencedColumn: (t) => t.articleId,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$FlashcardsTableAnnotationComposer(
+            $$FlashcardsTableTableAnnotationComposer(
               $db: $db,
-              $table: $db.flashcards,
+              $table: $db.flashcardsTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -1147,28 +1158,28 @@ class $$ArticlesTableAnnotationComposer
   }
 }
 
-class $$ArticlesTableTableManager extends RootTableManager<
+class $$ArticlesTableTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $ArticlesTable,
-    Article,
-    $$ArticlesTableFilterComposer,
-    $$ArticlesTableOrderingComposer,
-    $$ArticlesTableAnnotationComposer,
-    $$ArticlesTableCreateCompanionBuilder,
-    $$ArticlesTableUpdateCompanionBuilder,
-    (Article, $$ArticlesTableReferences),
-    Article,
-    PrefetchHooks Function({bool flashcardsRefs})> {
-  $$ArticlesTableTableManager(_$AppDatabase db, $ArticlesTable table)
+    $ArticlesTableTable,
+    ArticlesTableData,
+    $$ArticlesTableTableFilterComposer,
+    $$ArticlesTableTableOrderingComposer,
+    $$ArticlesTableTableAnnotationComposer,
+    $$ArticlesTableTableCreateCompanionBuilder,
+    $$ArticlesTableTableUpdateCompanionBuilder,
+    (ArticlesTableData, $$ArticlesTableTableReferences),
+    ArticlesTableData,
+    PrefetchHooks Function({bool flashcardsTableRefs})> {
+  $$ArticlesTableTableTableManager(_$AppDatabase db, $ArticlesTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$ArticlesTableFilterComposer($db: db, $table: table),
+              $$ArticlesTableTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$ArticlesTableOrderingComposer($db: db, $table: table),
+              $$ArticlesTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$ArticlesTableAnnotationComposer($db: db, $table: table),
+              $$ArticlesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> pubmedId = const Value.absent(),
@@ -1181,7 +1192,7 @@ class $$ArticlesTableTableManager extends RootTableManager<
             Value<String?> pdfPath = const Value.absent(),
             Value<DateTime> savedAt = const Value.absent(),
           }) =>
-              ArticlesCompanion(
+              ArticlesTableCompanion(
             id: id,
             pubmedId: pubmedId,
             title: title,
@@ -1205,7 +1216,7 @@ class $$ArticlesTableTableManager extends RootTableManager<
             Value<String?> pdfPath = const Value.absent(),
             Value<DateTime> savedAt = const Value.absent(),
           }) =>
-              ArticlesCompanion.insert(
+              ArticlesTableCompanion.insert(
             id: id,
             pubmedId: pubmedId,
             title: title,
@@ -1218,25 +1229,29 @@ class $$ArticlesTableTableManager extends RootTableManager<
             savedAt: savedAt,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) =>
-                  (e.readTable(table), $$ArticlesTableReferences(db, table, e)))
+              .map((e) => (
+                    e.readTable(table),
+                    $$ArticlesTableTableReferences(db, table, e)
+                  ))
               .toList(),
-          prefetchHooksCallback: ({flashcardsRefs = false}) {
+          prefetchHooksCallback: ({flashcardsTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (flashcardsRefs) db.flashcards],
+              explicitlyWatchedTables: [
+                if (flashcardsTableRefs) db.flashcardsTable
+              ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
-                  if (flashcardsRefs)
-                    await $_getPrefetchedData<Article, $ArticlesTable,
-                            Flashcard>(
+                  if (flashcardsTableRefs)
+                    await $_getPrefetchedData<ArticlesTableData,
+                            $ArticlesTableTable, FlashcardsTableData>(
                         currentTable: table,
-                        referencedTable:
-                            $$ArticlesTableReferences._flashcardsRefsTable(db),
+                        referencedTable: $$ArticlesTableTableReferences
+                            ._flashcardsTableRefsTable(db),
                         managerFromTypedResult: (p0) =>
-                            $$ArticlesTableReferences(db, table, p0)
-                                .flashcardsRefs,
+                            $$ArticlesTableTableReferences(db, table, p0)
+                                .flashcardsTableRefs,
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.articleId == item.id),
@@ -1248,19 +1263,20 @@ class $$ArticlesTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$ArticlesTableProcessedTableManager = ProcessedTableManager<
+typedef $$ArticlesTableTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
-    $ArticlesTable,
-    Article,
-    $$ArticlesTableFilterComposer,
-    $$ArticlesTableOrderingComposer,
-    $$ArticlesTableAnnotationComposer,
-    $$ArticlesTableCreateCompanionBuilder,
-    $$ArticlesTableUpdateCompanionBuilder,
-    (Article, $$ArticlesTableReferences),
-    Article,
-    PrefetchHooks Function({bool flashcardsRefs})>;
-typedef $$FlashcardsTableCreateCompanionBuilder = FlashcardsCompanion Function({
+    $ArticlesTableTable,
+    ArticlesTableData,
+    $$ArticlesTableTableFilterComposer,
+    $$ArticlesTableTableOrderingComposer,
+    $$ArticlesTableTableAnnotationComposer,
+    $$ArticlesTableTableCreateCompanionBuilder,
+    $$ArticlesTableTableUpdateCompanionBuilder,
+    (ArticlesTableData, $$ArticlesTableTableReferences),
+    ArticlesTableData,
+    PrefetchHooks Function({bool flashcardsTableRefs})>;
+typedef $$FlashcardsTableTableCreateCompanionBuilder = FlashcardsTableCompanion
+    Function({
   Value<int> id,
   required int articleId,
   required String question,
@@ -1270,7 +1286,8 @@ typedef $$FlashcardsTableCreateCompanionBuilder = FlashcardsCompanion Function({
   Value<DateTime> createdAt,
   Value<DateTime?> lastReviewedAt,
 });
-typedef $$FlashcardsTableUpdateCompanionBuilder = FlashcardsCompanion Function({
+typedef $$FlashcardsTableTableUpdateCompanionBuilder = FlashcardsTableCompanion
+    Function({
   Value<int> id,
   Value<int> articleId,
   Value<String> question,
@@ -1281,18 +1298,19 @@ typedef $$FlashcardsTableUpdateCompanionBuilder = FlashcardsCompanion Function({
   Value<DateTime?> lastReviewedAt,
 });
 
-final class $$FlashcardsTableReferences
-    extends BaseReferences<_$AppDatabase, $FlashcardsTable, Flashcard> {
-  $$FlashcardsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+final class $$FlashcardsTableTableReferences extends BaseReferences<
+    _$AppDatabase, $FlashcardsTableTable, FlashcardsTableData> {
+  $$FlashcardsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
 
-  static $ArticlesTable _articleIdTable(_$AppDatabase db) =>
-      db.articles.createAlias(
-          $_aliasNameGenerator(db.flashcards.articleId, db.articles.id));
+  static $ArticlesTableTable _articleIdTable(_$AppDatabase db) =>
+      db.articlesTable.createAlias($_aliasNameGenerator(
+          db.flashcardsTable.articleId, db.articlesTable.id));
 
-  $$ArticlesTableProcessedTableManager get articleId {
+  $$ArticlesTableTableProcessedTableManager get articleId {
     final $_column = $_itemColumn<int>('article_id')!;
 
-    final manager = $$ArticlesTableTableManager($_db, $_db.articles)
+    final manager = $$ArticlesTableTableTableManager($_db, $_db.articlesTable)
         .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_articleIdTable($_db));
     if (item == null) return manager;
@@ -1301,9 +1319,9 @@ final class $$FlashcardsTableReferences
   }
 }
 
-class $$FlashcardsTableFilterComposer
-    extends Composer<_$AppDatabase, $FlashcardsTable> {
-  $$FlashcardsTableFilterComposer({
+class $$FlashcardsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $FlashcardsTableTable> {
+  $$FlashcardsTableTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1332,18 +1350,18 @@ class $$FlashcardsTableFilterComposer
       column: $table.lastReviewedAt,
       builder: (column) => ColumnFilters(column));
 
-  $$ArticlesTableFilterComposer get articleId {
-    final $$ArticlesTableFilterComposer composer = $composerBuilder(
+  $$ArticlesTableTableFilterComposer get articleId {
+    final $$ArticlesTableTableFilterComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.articleId,
-        referencedTable: $db.articles,
+        referencedTable: $db.articlesTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$ArticlesTableFilterComposer(
+            $$ArticlesTableTableFilterComposer(
               $db: $db,
-              $table: $db.articles,
+              $table: $db.articlesTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -1353,9 +1371,9 @@ class $$FlashcardsTableFilterComposer
   }
 }
 
-class $$FlashcardsTableOrderingComposer
-    extends Composer<_$AppDatabase, $FlashcardsTable> {
-  $$FlashcardsTableOrderingComposer({
+class $$FlashcardsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $FlashcardsTableTable> {
+  $$FlashcardsTableTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1384,18 +1402,18 @@ class $$FlashcardsTableOrderingComposer
       column: $table.lastReviewedAt,
       builder: (column) => ColumnOrderings(column));
 
-  $$ArticlesTableOrderingComposer get articleId {
-    final $$ArticlesTableOrderingComposer composer = $composerBuilder(
+  $$ArticlesTableTableOrderingComposer get articleId {
+    final $$ArticlesTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.articleId,
-        referencedTable: $db.articles,
+        referencedTable: $db.articlesTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$ArticlesTableOrderingComposer(
+            $$ArticlesTableTableOrderingComposer(
               $db: $db,
-              $table: $db.articles,
+              $table: $db.articlesTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -1405,9 +1423,9 @@ class $$FlashcardsTableOrderingComposer
   }
 }
 
-class $$FlashcardsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $FlashcardsTable> {
-  $$FlashcardsTableAnnotationComposer({
+class $$FlashcardsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FlashcardsTableTable> {
+  $$FlashcardsTableTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1435,18 +1453,18 @@ class $$FlashcardsTableAnnotationComposer
   GeneratedColumn<DateTime> get lastReviewedAt => $composableBuilder(
       column: $table.lastReviewedAt, builder: (column) => column);
 
-  $$ArticlesTableAnnotationComposer get articleId {
-    final $$ArticlesTableAnnotationComposer composer = $composerBuilder(
+  $$ArticlesTableTableAnnotationComposer get articleId {
+    final $$ArticlesTableTableAnnotationComposer composer = $composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.articleId,
-        referencedTable: $db.articles,
+        referencedTable: $db.articlesTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
-            $$ArticlesTableAnnotationComposer(
+            $$ArticlesTableTableAnnotationComposer(
               $db: $db,
-              $table: $db.articles,
+              $table: $db.articlesTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -1456,28 +1474,29 @@ class $$FlashcardsTableAnnotationComposer
   }
 }
 
-class $$FlashcardsTableTableManager extends RootTableManager<
+class $$FlashcardsTableTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $FlashcardsTable,
-    Flashcard,
-    $$FlashcardsTableFilterComposer,
-    $$FlashcardsTableOrderingComposer,
-    $$FlashcardsTableAnnotationComposer,
-    $$FlashcardsTableCreateCompanionBuilder,
-    $$FlashcardsTableUpdateCompanionBuilder,
-    (Flashcard, $$FlashcardsTableReferences),
-    Flashcard,
+    $FlashcardsTableTable,
+    FlashcardsTableData,
+    $$FlashcardsTableTableFilterComposer,
+    $$FlashcardsTableTableOrderingComposer,
+    $$FlashcardsTableTableAnnotationComposer,
+    $$FlashcardsTableTableCreateCompanionBuilder,
+    $$FlashcardsTableTableUpdateCompanionBuilder,
+    (FlashcardsTableData, $$FlashcardsTableTableReferences),
+    FlashcardsTableData,
     PrefetchHooks Function({bool articleId})> {
-  $$FlashcardsTableTableManager(_$AppDatabase db, $FlashcardsTable table)
+  $$FlashcardsTableTableTableManager(
+      _$AppDatabase db, $FlashcardsTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$FlashcardsTableFilterComposer($db: db, $table: table),
+              $$FlashcardsTableTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$FlashcardsTableOrderingComposer($db: db, $table: table),
+              $$FlashcardsTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$FlashcardsTableAnnotationComposer($db: db, $table: table),
+              $$FlashcardsTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int> articleId = const Value.absent(),
@@ -1488,7 +1507,7 @@ class $$FlashcardsTableTableManager extends RootTableManager<
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime?> lastReviewedAt = const Value.absent(),
           }) =>
-              FlashcardsCompanion(
+              FlashcardsTableCompanion(
             id: id,
             articleId: articleId,
             question: question,
@@ -1508,7 +1527,7 @@ class $$FlashcardsTableTableManager extends RootTableManager<
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime?> lastReviewedAt = const Value.absent(),
           }) =>
-              FlashcardsCompanion.insert(
+              FlashcardsTableCompanion.insert(
             id: id,
             articleId: articleId,
             question: question,
@@ -1521,7 +1540,7 @@ class $$FlashcardsTableTableManager extends RootTableManager<
           withReferenceMapper: (p0) => p0
               .map((e) => (
                     e.readTable(table),
-                    $$FlashcardsTableReferences(db, table, e)
+                    $$FlashcardsTableTableReferences(db, table, e)
                   ))
               .toList(),
           prefetchHooksCallback: ({articleId = false}) {
@@ -1546,9 +1565,9 @@ class $$FlashcardsTableTableManager extends RootTableManager<
                     currentTable: table,
                     currentColumn: table.articleId,
                     referencedTable:
-                        $$FlashcardsTableReferences._articleIdTable(db),
+                        $$FlashcardsTableTableReferences._articleIdTable(db),
                     referencedColumn:
-                        $$FlashcardsTableReferences._articleIdTable(db).id,
+                        $$FlashcardsTableTableReferences._articleIdTable(db).id,
                   ) as T;
                 }
 
@@ -1562,24 +1581,24 @@ class $$FlashcardsTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$FlashcardsTableProcessedTableManager = ProcessedTableManager<
+typedef $$FlashcardsTableTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
-    $FlashcardsTable,
-    Flashcard,
-    $$FlashcardsTableFilterComposer,
-    $$FlashcardsTableOrderingComposer,
-    $$FlashcardsTableAnnotationComposer,
-    $$FlashcardsTableCreateCompanionBuilder,
-    $$FlashcardsTableUpdateCompanionBuilder,
-    (Flashcard, $$FlashcardsTableReferences),
-    Flashcard,
+    $FlashcardsTableTable,
+    FlashcardsTableData,
+    $$FlashcardsTableTableFilterComposer,
+    $$FlashcardsTableTableOrderingComposer,
+    $$FlashcardsTableTableAnnotationComposer,
+    $$FlashcardsTableTableCreateCompanionBuilder,
+    $$FlashcardsTableTableUpdateCompanionBuilder,
+    (FlashcardsTableData, $$FlashcardsTableTableReferences),
+    FlashcardsTableData,
     PrefetchHooks Function({bool articleId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
-  $$ArticlesTableTableManager get articles =>
-      $$ArticlesTableTableManager(_db, _db.articles);
-  $$FlashcardsTableTableManager get flashcards =>
-      $$FlashcardsTableTableManager(_db, _db.flashcards);
+  $$ArticlesTableTableTableManager get articlesTable =>
+      $$ArticlesTableTableTableManager(_db, _db.articlesTable);
+  $$FlashcardsTableTableTableManager get flashcardsTable =>
+      $$FlashcardsTableTableTableManager(_db, _db.flashcardsTable);
 }
