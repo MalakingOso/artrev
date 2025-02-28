@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:artrev/data/models/article.dart';
+import 'package:xml/xml.dart';
 
 part 'pubmed_service.g.dart';
 
@@ -46,43 +48,72 @@ class PubmedService {
 
   // Parse XML response to get article details
   List<Article> parseArticles(String xmlString) {
-    // This is a simplified parser. In a real app, use xml library for proper parsing
     final List<Article> articles = [];
+    final document = XmlDocument.parse(xmlString);
     
-    // Basic XML parsing to extract article information
-    // In a complete implementation, use a proper XML parser
-    final idRegex = RegExp(r'<PMID.*?>(\d+)</PMID>');
-    final titleRegex = RegExp(r'<ArticleTitle>(.*?)</ArticleTitle>', dotAll: true);
-    final abstractRegex = RegExp(r'<AbstractText.*?>(.*?)</AbstractText>', dotAll: true);
+    // Find all PubmedArticle elements
+    final articleElements = document.findAllElements('PubmedArticle');
     
-    // Extract PMIDs
-    final idMatches = idRegex.allMatches(xmlString);
-    final titleMatches = titleRegex.allMatches(xmlString);
-    final abstractMatches = abstractRegex.allMatches(xmlString);
-    
-    for (int i = 0; i < idMatches.length; i++) {
-      if (i < titleMatches.length) {
-        final article = Article(
-          pubmedId: idMatches.elementAt(i).group(1) ?? '',
-          title: titleMatches.elementAt(i).group(1) ?? '',
-          abstract: i < abstractMatches.length 
-              ? abstractMatches.elementAt(i).group(1) ?? ''
-              : '',
-          authors: '', // Need more complex parsing for authors
-          journal: '', // Need more complex parsing for journal
-          publicationDate: '', // Need more complex parsing for date
-          doi: '', // Need more complex parsing for DOI
-        );
-        
-        articles.add(article);
+    for (final articleElement in articleElements) {
+      // Extract PMID
+      final pmidElement = articleElement.findAllElements('PMID').firstOrNull;
+      final pubmedId = pmidElement?.innerText ?? '';
+      
+      // Extract article title
+      final titleElement = articleElement.findAllElements('ArticleTitle').firstOrNull;
+      final title = titleElement?.innerText ?? '';
+      
+      // Extract abstract text
+      final abstractElements = articleElement.findAllElements('AbstractText');
+      final abstract = abstractElements.map((e) => e.innerText).join(' ');
+      
+      // Extract authors
+      final authorElements = articleElement.findAllElements('Author');
+      final authorNames = authorElements.map((author) {
+        final lastName = author.findElements('LastName').firstOrNull?.innerText ?? '';
+        final firstName = author.findElements('ForeName').firstOrNull?.innerText ?? '';
+        return '$lastName $firstName'.trim();
+      }).join(', ');
+      
+      // Extract journal information
+      final journalElement = articleElement.findAllElements('Journal').firstOrNull;
+      final journal = journalElement?.findElements('Title').firstOrNull?.innerText ?? '';
+      
+      // Extract publication date
+      final pubDateElement = articleElement.findAllElements('PubDate').firstOrNull;
+      final year = pubDateElement?.findElements('Year').firstOrNull?.innerText ?? '';
+      final month = pubDateElement?.findElements('Month').firstOrNull?.innerText ?? '';
+      final publicationDate = '$month $year'.trim();
+      
+      // Extract DOI
+      final articleIdElements = articleElement.findAllElements('ArticleId');
+      String doi = '';
+      for (final idElement in articleIdElements) {
+        if (idElement.getAttribute('IdType') == 'doi') {
+          doi = idElement.innerText;
+          break;
+        }
       }
+      
+      final article = Article(
+        pubmedId: pubmedId,
+        title: title,
+        abstract: abstract,
+        authors: authorNames,
+        journal: journal,
+        publicationDate: publicationDate,
+        doi: doi,
+      );
+      
+      articles.add(article);
     }
     
     return articles;
   }
 }
 
+
 @riverpod
-PubmedService pubmedService(PubmedServiceRef ref) {
+PubmedService pubmedService(Ref ref) {
   return PubmedService();
 }
